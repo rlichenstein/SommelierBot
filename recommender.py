@@ -51,5 +51,6 @@ print(repr(item_features))
 #set up our LightFM model fit. 
 model = LightFM(loss='bpr')
 model.fit(interactions,item_features=item_features)
+prediction = model.predict([1,2,3],[y['title'] for y in winefeatures])
 
 #TODO: Divide into train/cv data and process, then run the model. 
