@@ -18,8 +18,8 @@ with open(filename, 'r',encoding="utf8") as csvfile:
     for row in csvreader:
         
         rows.append(row)
-        rankings.append({'taster':row[14], 'rating':row[4], 'title':row[11]})
-        winefeatures.append({'title':row[11],'country':row[1],'province':row[6],'region_1':row[7],'variety':row[12],'winery':row[13]})
+        rankings.append({'taster':row[12], 'rating':row[4], 'title':row[9]})
+        winefeatures.append({'title':row[9],'country':row[1],'province':row[6],'region_1':row[7],'variety':row[10],'winery':row[11]})
 
     print("Total # of rows = %d"%(csvreader.line_num))
 
@@ -27,6 +27,21 @@ print('field names are:' + ', '.join(field for field in fields))
 
 dataset = Dataset()
 dataset.fit((x['taster'] for x in rankings),(y['title'] for y in winefeatures))
+
+dataset.fit_partial(item_features=(x['country'] for x in winefeatures))
+dataset.fit_partial(item_features=(x['province'] for x in winefeatures))
+dataset.fit_partial(item_features=(x['region_1'] for x in winefeatures))
+dataset.fit_partial(item_features=(x['variety'] for x in winefeatures))
+dataset.fit_partial(item_features=(x['winery'] for x in winefeatures))
+
 num_users, num_items = dataset.interactions_shape()
 print('Num users: {}, num_items {}.'.format(num_users, num_items))
 
+(interactions, weights) = dataset.build_interactions(((x['taster'],x['title']) for x in rankings))
+print(repr(interactions))
+
+item_features = dataset.build_item_features(((x['title'],[x['country'],x['province'],x['region_1'],x['variety'],x['winery']]) for x in winefeatures))
+print(repr(item_features))
+
+model = LightFM(loss='bpr')
+model.fit(interactions,item_features=item_features)
