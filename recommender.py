@@ -39,15 +39,16 @@ cvdata = processcsv('winemag-data_crossval.csv');
 #print('field names are:' + ', '.join(field for field in fields))
 dataset = Dataset()
 print(trainratings.fieldnames)
-dataset.fit((x['taster_number'] for x in trainratings),(y['wine_id'] for y in trainratings)) #provide iterators for users and the corresponding items
+print(traindata.fieldnames)
+dataset.fit((x['taster_number'] for x in trainratings),(y['wine_id'] for y in traindata)) #provide iterators for users and the corresponding items
 
 
 #manually add all features to the dataset
-dataset.fit_partial(items=(x['wine_id'] for x in traindata),item_features=(x['country'] for x in traindata))
-dataset.fit_partial(items=(x['wine_id'] for x in traindata),item_features=(x['province'] for x in traindata))
-dataset.fit_partial(items=(x['wine_id'] for x in traindata),item_features=(x['region_1'] for x in traindata))
-dataset.fit_partial(items=(x['wine_id'] for x in traindata),item_features=(x['variety'] for x in traindata))
-dataset.fit_partial(items=(x['wine_id'] for x in traindata),item_features=(x['winery'] for x in traindata))
+dataset.fit_partial(item_features=(x['country'] for x in traindata))
+dataset.fit_partial(item_features=(x['province'] for x in traindata))
+dataset.fit_partial(item_features=(x['region_1'] for x in traindata))
+dataset.fit_partial(item_features=(x['variety'] for x in traindata))
+dataset.fit_partial(item_features=(x['winery'] for x in traindata))
 
 num_users, num_items = dataset.interactions_shape()
 print('Num users: {}, num_items {}.'.format(num_users, num_items))
