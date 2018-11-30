@@ -28,6 +28,8 @@ import keyword_filter
 def import_reviews():
     print('importing reviews from csv [', end='',flush=True)
     review_list = []        #a list of all the reviews we process
+    nltk.download('stopwords')
+    nltk.download('punkt')
     stop_words = set(stopwords.words('english'))
 
     with open('winemag-data-130k.csv', mode='r', encoding='utf8') as csv_file:
