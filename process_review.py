@@ -1,20 +1,8 @@
 """
-def import_reviews(): - Import Wine Reviews from csv remove stopwords and
-   store each review as a textblob "document" in a list of docs (or bloblist)
-def build_word_dict(review_list): -
-        1. Itterate through documents
-            a. itterate through each word in the document and build a dictionary
-               of words that contain index values (just populate in order encountered)
-def review_tf_idf(keyword_dict, review_list):
-    1. Itterate through documents and convert to textblobs, append the blobs to
-       a list of blobs
-    1. Itterate throught the list of blobs
-        a. initialize a list for each document/blob that has a size that is
-           equal to the number key value pairs in the dictionary
-        b. itterate through each word in document/blob and calculate tf-idf score
-        c. store the tf-idf score in the list we just made accourding to the
-           index listed in the dictionary
-        d. append the feature list to a master list of all examples
+SommelierBot
+Campbell Boswell, Rober Lichenstein, Kyle Calder
+CS 451 Final Project
+process_review.py
 """
 import csv
 import nltk
@@ -26,10 +14,14 @@ from nltk.probability import FreqDist
 import keyword_filter
 
 def import_reviews():
+    '''
+    A simple function which imports review text from the kaggel data set we are
+    working with. This function also removes stopwords from the reviews using
+    the stopword list included in NLTK
+    '''
+
     print('importing reviews from csv [', end='',flush=True)
     review_list = []        #a list of all the reviews we process
-    nltk.download('stopwords')
-    nltk.download('punkt')
     stop_words = set(stopwords.words('english'))
 
     with open('winemag-data-130k.csv', mode='r', encoding='utf8') as csv_file:
@@ -38,16 +30,10 @@ def import_reviews():
         i = 0
         for row in csv_reader:
 
-            #for efficient debugging
-            #if i > 1000:
-            #    break
-
             if (i % 1000) == 0:
                 print('*', end='',flush=True)
             review_as_list = []     #a single review in list form
             review_as_text = row[2]
-
-            #might need to double check that this field isn't empty
 
             word_tokens = word_tokenize(review_as_text)
             for w in word_tokens:
@@ -64,6 +50,15 @@ def import_reviews():
 
 
 def build_word_dict(review_list, frequency):
+    '''
+    Builds a dictionary of the n most common terms across our reviews
+    (where n is specified by the variable "frequency"). This list of terms
+    is composed by removing some of the most common words that are
+    non-adjectives and reflect the sampling of wine in gerneral instead of the
+    flavor profile of a specific wine. These words that are flagged for removal
+    are the file keyword_filter.py
+    '''
+
     print('building word dictionary [', end='', flush=True)
 
     keyword_dict = {} #a dictionary of keywords and indices to be returned
@@ -108,6 +103,12 @@ def build_word_dict(review_list, frequency):
 
 
 def assign_features(keyword_dict, review_list):
+    '''
+    This function creates a content vector for each review that reflects the
+    presence of any of the most common words listed in our dictionary generated
+    by the function build_word_dict. These content vectors can be written to an
+    output csv with the function write_features
+    '''
     print('generating frequency scores [', end='', flush=True)
     feature_count = len(keyword_dict)
     feature_list = []
@@ -139,8 +140,10 @@ def assign_features(keyword_dict, review_list):
 
 
 def write_features(feature_list, keyword_dict):
-    '''Write the features we generated across all data to a csv so that is can
-       be easily fed to our learning algorithm'''
+    '''
+    This function writes the features we generated across all data to a csv so
+    that it can be easily fed to our learning algorithm.
+    '''
     print("writing fetures to csv")
     with open('review_features.csv', 'w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
