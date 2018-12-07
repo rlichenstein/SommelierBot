@@ -12,9 +12,6 @@ keyword_filter.py
     
 recgood.py
     Our main python file for running the LightFM Model and generating recommendations on a per user basis. Uses asynchronous stochastic gradient descent and matrix factorization via LightFM to give us recommendations on wines for users in our dataset. Edit the file to change the output to predict for other users besides user 1. Recommended to read through the comments carefully before trying to use the either the random search or optimization functions. 
-split_datasets.zip
-
-wine_ratings.csv
 
 wine-data-130k.csv
  - A copy of the original Kaggle data set that has been updated to include the content vectors produced from our review text pre-processing.
