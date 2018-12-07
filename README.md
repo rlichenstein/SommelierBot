@@ -9,8 +9,9 @@ process_review.py
 
 keyword_filter.py
     This file contains a list of just over 100 words which are to be ignored during the creation of a set of the 200 most common words across all reviews. The words are ignored because they either are extremely general, but were not removed from the reviews when filtering for stopwords, or because they describe the wine tasting process but not aspects of the wine itself (i.e. glass, flavors, mouth).
+    
 recgood.py
-
+    Our main python file for running the LightFM Model and generating recommendations on a per user basis. Uses asynchronous stochastic gradient descent and matrix factorization via LightFM to give us recommendations on wines for users in our dataset. Edit the file to change the output to predict for other users besides user 1. Recommended to read through the comments carefully before trying to use the either the random search or optimization functions. 
 split_datasets.zip
 
 wine_ratings.csv
